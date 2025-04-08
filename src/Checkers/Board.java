@@ -34,7 +34,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
         title.setFont(new Font("Serif", Font.CENTER_BASELINE, 40));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setForeground(Color.darkGray);
-        howToPlay = new JButton("Checkers?");
+        howToPlay = new JButton("Rules");
         howToPlay.addActionListener(this);
         newGame = new JButton("New Game");
         newGame.addActionListener(this);
@@ -76,6 +76,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
         repaint(); // repaints board
         System.out.println("Sending to board: " + board.score());
         out.println(board.score());
+        out.println("Pieces Remaining:");
     }
 
     public void getPlayersNames(){ // gets players names through JTextField
@@ -173,9 +174,9 @@ class Board extends JPanel implements ActionListener, MouseListener {
     void MakeMove(movesMade move) { // moves the piece
 
         board.makeMove(move); // calls makeMove method in Data class
+        out.println(board.score()); // sends score to scoreboard to update
 
         if (move.isJump()) { // checks if player must continue jumping
-            out.println(board.score()); // sends score to scoreboard to update
             legalMoves = board.getLegalJumpsFrom(currentPlayer, move.toRow, move.toCol);
             if (legalMoves != null) { // if player must jump again
                 if (currentPlayer == Data.player1)
@@ -195,7 +196,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
             legalMoves = board.getLegalMoves(currentPlayer); // gets legal moves for player 2
             if (legalMoves == null) {// if there aren't any moves, player 1 wins
                 gameOver(Player1 + " wins!");
-                out.println("Game Over! White wins");
+                out.println("Game Over! " + Player1 + " wins");
             }
             else if (legalMoves[0].isJump()) // if player 2 must jump, it indicates so
                 message.setText(Player2 + ", you must jump.");
@@ -206,7 +207,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
             legalMoves = board.getLegalMoves(currentPlayer);
             if (legalMoves == null) {// if there aren't any moves, player 2 wins
                 gameOver(Player2 + " wins!");
-                out.println("Game Over! Black wins");
+                out.println("Game Over! " + Player2 + " wins");
             }
             else if (legalMoves[0].isJump())
                 message.setText(Player1 + ", you must jump.");

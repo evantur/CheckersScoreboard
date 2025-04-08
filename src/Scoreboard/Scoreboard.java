@@ -62,9 +62,8 @@ public class Scoreboard {
         String input;
         while ((input = in.readLine()) != null) {
             System.out.println(input);
-            if (!input.contains(":")) { // end condition
+            if (input.contains(" ")) { // end condition
                 panel.setTitle(input);
-                break;
             }
             else {
                 // take input string and use it to update scoreboard
