@@ -47,7 +47,7 @@ public class Scoreboard {
         frame.setSize(600, 275);
         frame.setResizable(false);
         frame.setLayout(null);
-        frame.setLocationByPlatform(true);
+        frame.setLocation(650, 0);
         frame.setVisible(true);
 
         // properly place components

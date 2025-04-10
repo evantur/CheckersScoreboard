@@ -74,7 +74,6 @@ class Board extends JPanel implements ActionListener, MouseListener {
     }
 
     public void actionPerformed(ActionEvent evt) {
-
         Object src = evt.getSource();
         if (src == newGame) // if newGame button is pressed, a new game is created
             NewGame();
@@ -83,7 +82,6 @@ class Board extends JPanel implements ActionListener, MouseListener {
     }
 
     void NewGame() {
-
         board.setUpBoard();
         currentPlayer = Data.player1; // indicates its player 1's move
         legalMoves = board.getLegalMoves(Data.player1); // searches for legal moves

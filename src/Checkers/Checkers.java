@@ -16,7 +16,7 @@ public class Checkers extends JFrame { // Checkers class begins, extends on JFra
         game.setSize(340,480);
         game.setResizable(false); // the window is not resizable
         game.setLayout(null);
-        game.setLocationByPlatform(true);
+        game.setLocationRelativeTo(null);
         game.setVisible(true);
         game.setBackground(new Color(225, 225, 225));
 
