@@ -30,7 +30,7 @@ public class Scoreboard {
 
         // create frame
         JFrame frame = new JFrame("Live Scoreboard");
-        frame.setIconImage(new ImageIcon("project2/Checkers_logo.png").getImage());
+        frame.setIconImage(new ImageIcon("src/Images/Scoreboard_logo.png").getImage());
 
         // create and add new scoreboard
         ScorePanel panel = new ScorePanel();

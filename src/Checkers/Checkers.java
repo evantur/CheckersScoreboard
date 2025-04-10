@@ -9,7 +9,7 @@ public class Checkers extends JFrame { // Checkers class begins, extends on JFra
         JFrame game = new JFrame(); // creates new frame
 
         // set the frame's main settings
-        game.setIconImage(new ImageIcon("project2/Checkers_logo.png").getImage());
+        game.setIconImage(new ImageIcon("src/Images/Checkers_logo.png").getImage());
         game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         game.getContentPane();
         game.pack();

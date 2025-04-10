@@ -1,9 +1,13 @@
 package Checkers;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -24,10 +28,17 @@ class Board extends JPanel implements ActionListener, MouseListener {
     Socket socket;
     PrintWriter out;
     BufferedReader in;
+    BufferedImage player1_piece, player2_piece, player1_king, player2_king;
 
     public Board() throws Exception { // default constructor
 
         addMouseListener(this); // implements Mouse Listener
+
+        // setup images
+        player1_piece = ImageIO.read(new File("src/Images/Player1_piece.png"));
+        player2_piece = ImageIO.read(new File("src/Images/Player2_piece.png"));
+        player1_king = ImageIO.read(new File("src/Images/Player1_king.png"));
+        player2_king = ImageIO.read(new File("src/Images/Player2_king.png"));
 
         // assigns all JLabels and JButtons to their values, as well as styles them
         title = new JLabel("Checkers!");
@@ -52,6 +63,14 @@ class Board extends JPanel implements ActionListener, MouseListener {
         board = new Data(); // assigns to new Data class
         getPlayersNames(); // calls to get players' names
         NewGame(); // calls to start a new game
+    }
+
+    public BufferedImage resizeImage(BufferedImage inputImage, int width, int height) throws IOException {
+        BufferedImage resultImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics2d = resultImage.createGraphics();
+        graphics2d.drawImage(inputImage, 0, 0, width, height, null);
+        graphics2d.dispose();
+        return resultImage;
     }
 
     public void actionPerformed(ActionEvent evt) {
@@ -248,32 +267,24 @@ class Board extends JPanel implements ActionListener, MouseListener {
 
                 // paints squares
                 if ( row % 2 == col % 2 )
-                    g.setColor(new Color(139,119,101));
+                    g.setColor(new Color(77,77,77));
                 else
-                    g.setColor(new Color(238,203,173));
+                    g.setColor(new Color(230,230,230));
                 g.fillRect(2 + col*40, 2 + row*40, 40, 40);
 
                 // paints squares with pieces on them
                 switch (board.pieceAt(row,col)) {
                     case Data.player1:
-                        g.setColor(Color.lightGray);
-                        g.fillOval(4 + col*40, 4 + row*40, 36, 36);
+                        g.drawImage(player1_piece, 4 + col*40, 7 + row*40, null);
                         break;
                     case Data.player2:
-                        g.setColor(Color.darkGray);
-                        g.fillOval(4 + col*40, 4 + row*40, 36, 36);
+                        g.drawImage(player2_piece, 4 + col*40, 7 + row*40, null);
                         break;
                     case Data.playerKing1:
-                        g.setColor(Color.lightGray);
-                        g.fillOval(4 + col*40, 4 + row*40, 36, 36);
-                        g.setColor(Color.white);
-                        g.drawString("K", 27 + col*40, 36 + row*40);
+                        g.drawImage(player1_king, 4 + col*40, 7 + row*40, null);
                         break;
                     case Data.playerKing2:
-                        g.setColor(Color.darkGray);
-                        g.fillOval(4 + col*40, 4 + row*40, 36, 36);
-                        g.setColor(Color.white);
-                        g.drawString("K", 27 + col*40, 36 + row*40);
+                        g.drawImage(player2_king, 4 + col*40, 7 + row*40, null);
                         break;
                 }
             }
