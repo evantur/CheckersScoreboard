@@ -15,24 +15,24 @@ import java.net.Socket;
 class Board extends JPanel implements ActionListener, MouseListener {
 
     Data board; // declares new Data class to store the game's information
-    boolean gameInProgress; // boolean to check if game is in progress
-    int currentPlayer; // tracks whose turn it is
-    int selectedRow, selectedCol; // tracks which squares have been selected
-    movesMade[] legalMoves; // declares new movesMade array
-    JLabel title; // title JLabel on frame
+    boolean gameInProgress;
+    int currentPlayer;
+    int selectedRow, selectedCol;
+    movesMade[] legalMoves;
+    JLabel title;
     JButton newGame; // newGame JButton on frame - starts a new game
     JButton howToPlay; // howToPlay JButton on frame - gives intro to Checkers and how to play
     JLabel message; // message JLabel on frame - indicates whose turn it is
-    String Player1; // first player's name
-    String Player2; // second player's name
+    String Player1;
+    String Player2;
     Socket socket;
     PrintWriter out;
     BufferedReader in;
     BufferedImage player1_piece, player2_piece, player1_king, player2_king;
 
-    public Board() throws Exception { // default constructor
+    public Board() throws Exception {
 
-        addMouseListener(this); // implements Mouse Listener
+        addMouseListener(this);
 
         // setup images
         player1_piece = ImageIO.read(new File("src/Images/Player1_piece.png"));
@@ -60,9 +60,9 @@ class Board extends JPanel implements ActionListener, MouseListener {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         
-        board = new Data(); // assigns to new Data class
-        getPlayersNames(); // calls to get players' names
-        NewGame(); // calls to start a new game
+        board = new Data();
+        getPlayersNames();
+        NewGame();
     }
 
     public BufferedImage resizeImage(BufferedImage inputImage, int width, int height) throws IOException {
@@ -83,20 +83,20 @@ class Board extends JPanel implements ActionListener, MouseListener {
 
     void NewGame() {
         board.setUpBoard();
-        currentPlayer = Data.player1; // indicates its player 1's move
-        legalMoves = board.getLegalMoves(Data.player1); // searches for legal moves
+        currentPlayer = Data.player1;
+        legalMoves = board.getLegalMoves(Data.player1);
         selectedRow = -1; // no square is selected
-        message.setText("It's " + Player1 + "'s turn."); // indicates whose turn it is
-        gameInProgress = true; // sets gameInProgress as true
-        newGame.setEnabled(true); // enables newGame button
-        howToPlay.setEnabled(true); // enables howToPlayButton
-        repaint(); // repaints board
+        message.setText("It's " + Player1 + "'s turn.");
+        gameInProgress = true;
+        newGame.setEnabled(true);
+        howToPlay.setEnabled(true);
+        repaint();
         System.out.println("Sending to board: " + board.score());
         out.println(board.score());
         out.println("Pieces Remaining:");
     }
 
-    public void getPlayersNames(){ // gets players names through JTextField
+    public void getPlayersNames(){
 
         JTextField player1Name = new JTextField("Player 1");
         JTextField player2Name = new JTextField("Player 2");
@@ -107,21 +107,20 @@ class Board extends JPanel implements ActionListener, MouseListener {
         getNames.add(player1Name);
         getNames.add(player2Name);
 
-        // player inputs name through Confirm Dialog
         int result = JOptionPane.showConfirmDialog(null, getNames, "Enter Your Names!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         
-        if (result == JOptionPane.OK_OPTION) { // if players give names, names are assigned
+        if (result == JOptionPane.OK_OPTION) {
             Player1 = player1Name.getText();
             Player2 = player2Name.getText();
-        } else { // otherwise default names are given
+        } else {
             Player1 = "Player 1";
             Player2 = "Player 2";
         }
 
     }
 
-    void instructions() { // when howToPlay button is pressed, instruction Message Dialog appears
+    void instructions() {
 
         // brief history of Checkers and a link to read the instructions - the link is not clickable
         String intro = "Checkers, called Draughts in most countries,\n" +
@@ -130,70 +129,70 @@ class Board extends JPanel implements ActionListener, MouseListener {
                 "These are the standard U.S. rules for Checkers.\n\n"+
                 "Read how to play: http:// abt.cm/1d0fHKE";
 
-        JOptionPane.showMessageDialog(null, intro, "What is Checkers", JOptionPane.PLAIN_MESSAGE); // shows message
+        JOptionPane.showMessageDialog(null, intro, "What is Checkers", JOptionPane.PLAIN_MESSAGE);
 
     }
 
-    void gameOver(String str) { // when game is over
+    void gameOver(String str) {
 
-        message.setText(str); // indicates who won
-        newGame.setEnabled(true); // enables newGame button
-        howToPlay.setEnabled(true); // enables howToPlayButton
-        gameInProgress = false; // sets gameInProgress as false, until new game is initialized
+        message.setText(str);
+        newGame.setEnabled(true);
+        howToPlay.setEnabled(true);
+        gameInProgress = false;
 
     }
 
-    public void mousePressed(MouseEvent evt) { // when the board is clicked
+    public void mousePressed(MouseEvent evt) {
 
-        if (!gameInProgress){ // if game is not in progress
-            message.setText("Start a new game."); // indicates to start a new game
-        }else { // otherwise, calculates which square was pressed
-            int col = (evt.getX() - 2) / 40; // calculation of square's column
-            int row = (evt.getY() - 2) / 40; // calculation of square's row
-            if (col >= 0 && col < 8 && row >= 0 && row < 8) // if square is on the board
-                ClickedSquare(row,col); // calls ClickedSquare
+        if (!gameInProgress){
+            message.setText("Start a new game.");
+        }else {
+            int col = (evt.getX() - 2) / 40;
+            int row = (evt.getY() - 2) / 40;
+            if (col >= 0 && col < 8 && row >= 0 && row < 8)
+                ClickedSquare(row,col);
         }
     }
 
-    void ClickedSquare(int row, int col) { // processes legal moves
+    void ClickedSquare(int row, int col) {
 
-        for (int i = 0; i < legalMoves.length; i++){ // runs through all legal moves
-            if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) { // if selected piece can be moved
-                selectedRow = row; // assigns selected row
-                selectedCol = col; // assigns selected column
-                if (currentPlayer == Data.player1) // indicates whose turn it is
+        for (int i = 0; i < legalMoves.length; i++){
+            if (legalMoves[i].fromRow == row && legalMoves[i].fromCol == col) {
+                selectedRow = row;
+                selectedCol = col;
+                if (currentPlayer == Data.player1)
                     message.setText("It's " + Player1 + "'s turn.");
                 else
                     message.setText("It's " + Player2 + "'s turn.");
-                repaint(); // repaints board
+                repaint();
                 return;
             }
         }
 
-        if (selectedRow < 0) { // if no square is selected
-            message.setText("Select a piece to move."); // indicates player to pick a piece to move
+        if (selectedRow < 0) {
+            message.setText("Select a piece to move.");
             return;
         }
 
-        for (int i = 0; i < legalMoves.length; i++){ // runs through all legal moves
-            if (legalMoves[i].fromRow == selectedRow && legalMoves[i].fromCol == selectedCol // if already selected piece can move
-                && legalMoves[i].toRow == row && legalMoves[i].toCol == col) { // and the selected piece's destination is legal
-                MakeMove(legalMoves[i]); // make the move
+        for (int i = 0; i < legalMoves.length; i++){
+            if (legalMoves[i].fromRow == selectedRow && legalMoves[i].fromCol == selectedCol
+                && legalMoves[i].toRow == row && legalMoves[i].toCol == col) {
+                MakeMove(legalMoves[i]);
                 return;
             }
         }
 
-        // when a piece is selected and player clicks elsewhere besides legal destination, program encourages player to move piece
-        message.setText("Where do you want to move it?");  
+        // when a piece is selected and player clicks elsewhere besides legal destination
+        message.setText("Where do you want to move it?");
 
     }
 
-    void MakeMove(movesMade move) { // moves the piece
+    void MakeMove(movesMade move) {
 
-        board.makeMove(move); // calls makeMove method in Data class
-        out.println(board.score()); // sends score to scoreboard to update
+        board.makeMove(move);
+        out.println(board.score());
 
-        if (move.isJump()) { // checks if player must continue jumping
+        if (move.isJump()) {
             legalMoves = board.getLegalJumpsFrom(currentPlayer, move.toRow, move.toCol);
             if (legalMoves != null) { // if player must jump again
                 if (currentPlayer == Data.player1)
@@ -202,37 +201,37 @@ class Board extends JPanel implements ActionListener, MouseListener {
                     message.setText(Player2 + ", you must jump.");
                 selectedRow = move.toRow; 
                 selectedCol = move.toCol;
-                repaint(); // repaints board
+                repaint();
 
                 return;
             }
         }
 
-        if (currentPlayer == Data.player1) { // if it was player 1's turn
-            currentPlayer = Data.player2; // it's now player 2's
-            legalMoves = board.getLegalMoves(currentPlayer); // gets legal moves for player 2
-            if (legalMoves == null) {// if there aren't any moves, player 1 wins
+        if (currentPlayer == Data.player1) {
+            currentPlayer = Data.player2;
+            legalMoves = board.getLegalMoves(currentPlayer);
+            if (legalMoves == null) {
                 gameOver(Player1 + " wins!");
                 out.println("Game Over! " + Player1 + " wins");
             }
-            else if (legalMoves[0].isJump()) // if player 2 must jump, it indicates so
+            else if (legalMoves[0].isJump())
                 message.setText(Player2 + ", you must jump.");
-            else // otherwise, it indicates it's player 2's turn
+            else
                 message.setText("It's " + Player2 + "'s turn.");
-        } else { // otherwise, if it was player 2's turn
-            currentPlayer = Data.player1; // it's now player 1's turn
+        } else {
+            currentPlayer = Data.player1;
             legalMoves = board.getLegalMoves(currentPlayer);
-            if (legalMoves == null) {// if there aren't any moves, player 2 wins
+            if (legalMoves == null) {
                 gameOver(Player2 + " wins!");
                 out.println("Game Over! " + Player2 + " wins");
             }
             else if (legalMoves[0].isJump())
                 message.setText(Player1 + ", you must jump.");
-            else // otherwise, it indicates it's player 1's turn
+            else
                 message.setText("It's " + Player1 + "'s turn.");
         }
 
-        selectedRow = -1; // no squares are not selected
+        selectedRow = -1;
 
         if (legalMoves != null) {
             boolean sameFromSquare = true;
@@ -242,7 +241,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
                     sameFromSquare = false;
                     break;
                 }
-            if (sameFromSquare) { // if true, the player's final piece is already selected
+            if (sameFromSquare) {
                 selectedRow = legalMoves[0].fromRow;
                 selectedCol = legalMoves[0].fromCol;
             }
@@ -253,7 +252,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
     }
 
 
-    public void paintComponent(Graphics g) { // paints board
+    public void paintComponent(Graphics g) {
 
         // boarder around game board
         g.setColor(new Color(139,119,101));
@@ -288,7 +287,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
             }
         }
 
-        if (gameInProgress) { // if game is in progress
+        if (gameInProgress) {
 
             g.setColor(new Color(0, 255,0));
             for (int i = 0; i < legalMoves.length; i++) { // runs through all legal move
