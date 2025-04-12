@@ -1,6 +1,7 @@
 package Checkers;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -29,6 +30,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
     PrintWriter out;
     BufferedReader in;
     BufferedImage player1_piece, player2_piece, player1_king, player2_king;
+    Sound pieceMove;
     
 
     public Board() throws Exception {
@@ -40,6 +42,9 @@ class Board extends JPanel implements ActionListener, MouseListener {
         player2_piece = ImageIO.read(new File("src/Images/Player2_piece.png"));
         player1_king = ImageIO.read(new File("src/Images/Player1_king.png"));
         player2_king = ImageIO.read(new File("src/Images/Player2_king.png"));
+
+        // setup sounds
+        pieceMove = new Sound("src/Sounds/piece-move.wav");
 
         // assigns all JLabels and JButtons to their values, as well as styles them
         title = new JLabel("Checkers!");
@@ -193,7 +198,6 @@ class Board extends JPanel implements ActionListener, MouseListener {
         board.makeMove(move);
         // update scoreboard
         out.println(board.score());
-        // TODO: play piece-move sound
 
         if (move.isJump()) {
             legalMoves = board.getLegalJumpsFrom(currentPlayer, move.toRow, move.toCol);
@@ -251,7 +255,13 @@ class Board extends JPanel implements ActionListener, MouseListener {
         }
 
         repaint();
-
+        // TODO: play piece-move sound
+        try {
+            pieceMove.play();
+        } catch (LineUnavailableException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 
