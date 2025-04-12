@@ -2,6 +2,7 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar"
+        "lib/**/*.jar",
+        "c:\\openjfx-24_windows-x64_bin-sdk\\javafx-sdk-24\\lib\\javafx.media.jar"
     ]
 }

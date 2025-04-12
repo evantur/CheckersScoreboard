@@ -29,6 +29,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
     PrintWriter out;
     BufferedReader in;
     BufferedImage player1_piece, player2_piece, player1_king, player2_king;
+    
 
     public Board() throws Exception {
 
@@ -190,7 +191,9 @@ class Board extends JPanel implements ActionListener, MouseListener {
     void MakeMove(movesMade move) {
 
         board.makeMove(move);
+        // update scoreboard
         out.println(board.score());
+        // TODO: play piece-move sound
 
         if (move.isJump()) {
             legalMoves = board.getLegalJumpsFrom(currentPlayer, move.toRow, move.toCol);
