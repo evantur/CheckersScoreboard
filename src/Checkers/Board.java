@@ -30,7 +30,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
     PrintWriter out;
     BufferedReader in;
     BufferedImage player1_piece, player2_piece, player1_king, player2_king;
-    Sound pieceMove;
+    Sound pieceMove, kingCrowned;
     
 
     public Board() throws Exception {
@@ -44,7 +44,8 @@ class Board extends JPanel implements ActionListener, MouseListener {
         player2_king = ImageIO.read(new File("src/Images/Player2_king.png"));
 
         // setup sounds
-        pieceMove = new Sound("src/Sounds/piece-move.wav");
+        pieceMove = new Sound("src/Sounds/piece-move.wav", 500);
+        kingCrowned = new Sound("src/Sounds/piece-move.wav", 1000);
 
         // assigns all JLabels and JButtons to their values, as well as styles them
         title = new JLabel("Checkers!");
@@ -209,7 +210,11 @@ class Board extends JPanel implements ActionListener, MouseListener {
                 selectedRow = move.toRow; 
                 selectedCol = move.toCol;
                 repaint();
-
+                try {
+                    pieceMove.play();
+                } catch (LineUnavailableException | IOException e) {
+                    e.printStackTrace();
+                }
                 return;
             }
         }
@@ -255,11 +260,9 @@ class Board extends JPanel implements ActionListener, MouseListener {
         }
 
         repaint();
-        // TODO: play piece-move sound
         try {
             pieceMove.play();
         } catch (LineUnavailableException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -292,9 +295,19 @@ class Board extends JPanel implements ActionListener, MouseListener {
                         break;
                     case Data.playerKing1:
                         g.drawImage(player1_king, 4 + col*40, 7 + row*40, null);
+                        try {
+                            kingCrowned.play();
+                        } catch (LineUnavailableException | IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case Data.playerKing2:
                         g.drawImage(player2_king, 4 + col*40, 7 + row*40, null);
+                        try {
+                            kingCrowned.play();
+                        } catch (LineUnavailableException | IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                 }
             }

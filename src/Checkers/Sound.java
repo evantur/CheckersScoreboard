@@ -16,10 +16,12 @@ public class Sound {
 	Clip clip;
 	AudioInputStream audioInputStream;
 	String filePath;
+	int time;
 
-	public Sound(String filePath) throws UnsupportedAudioFileException, IOException, LineUnavailableException { 
+	public Sound(String filePath, int time) throws UnsupportedAudioFileException, IOException, LineUnavailableException { 
 		// create AudioInputStream object
 		this.filePath = filePath;
+		this.time = time;
 		audioInputStream = AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile()); 
 		
 		// create clip reference 
@@ -34,7 +36,7 @@ public class Sound {
 		clip.loop(0);
 		clip.start();
 		try {
-            TimeUnit.MILLISECONDS.sleep(500);
+            TimeUnit.MILLISECONDS.sleep(time);
 			resetAudioStream();
         } catch (Exception e) {};
 	}
