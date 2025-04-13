@@ -30,7 +30,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
     PrintWriter out;
     BufferedReader in;
     BufferedImage player1_piece, player2_piece, player1_king, player2_king;
-    Sound pieceMove;
+    Sound pieceMove, gameWin;
     
 
     public Board() throws Exception {
@@ -45,6 +45,7 @@ class Board extends JPanel implements ActionListener, MouseListener {
 
         // setup sounds
         pieceMove = new Sound("src/Sounds/piece-move.wav", 500);
+        gameWin = new Sound("src/Sounds/game-win.wav", 3750);
 
         // assigns all JLabels and JButtons to their values, as well as styles them
         title = new JLabel("Checkers!");
@@ -140,12 +141,15 @@ class Board extends JPanel implements ActionListener, MouseListener {
     }
 
     void gameOver(String str) {
-
-        message.setText(str);
+        message.setText(str);        
         newGame.setEnabled(true);
         howToPlay.setEnabled(true);
         gameInProgress = false;
-
+        try {
+            gameWin.play();
+        } catch (LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void mousePressed(MouseEvent evt) {
