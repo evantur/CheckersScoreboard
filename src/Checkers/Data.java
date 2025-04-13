@@ -1,5 +1,9 @@
 package Checkers;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 class Data {
 
@@ -10,13 +14,19 @@ class Data {
     player2 = 3, // black player
     playerKing2 = 4;
 
+    Sound kingCrowned;
+
     private int[][] board; // declares an int array called board
 
     public Data() { // Data default constructor
 
         board = new int[8][8]; // creates an 8 by 8 board
         setUpBoard(); // calls setUpBoard
-
+        try {
+            kingCrowned = new Sound("src/Sounds/king-sound.wav", 1100);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setUpBoard() { // sets up board
@@ -91,10 +101,20 @@ class Data {
 
         if (toRow == 0 && board[toRow][toCol] == player1){ // if a player 1 piece reaches top row
             board[toRow][toCol] = playerKing1;
+            try {
+                kingCrowned.play();
+            } catch (LineUnavailableException | IOException e) {
+                e.printStackTrace();
+            }
         }
 
         if (toRow == 7 && board[toRow][toCol] == player2){ // if a player 2 piece reaches bottom row
             board[toRow][toCol] = playerKing2; // it becomes a king
+            try {
+                kingCrowned.play();
+            } catch (LineUnavailableException | IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
